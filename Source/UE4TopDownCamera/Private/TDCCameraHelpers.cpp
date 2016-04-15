@@ -10,7 +10,7 @@ bool FTDCCameraHelpers::DeprojectScreenToWorld(const FVector2D& ScreenPosition, 
 		FSceneViewProjectionData ProjectionData;
 		if (Player->GetProjectionData(Player->ViewportClient->Viewport, eSSP_FULL, /*out*/ ProjectionData))
 		{
-			const FMatrix InvViewMatrix = ProjectionData.ViewMatrix.InverseFast();
+			const FMatrix InvViewMatrix = ProjectionData.ViewRotationMatrix.InverseFast();
 			const FMatrix InvProjectionMatrix = ProjectionData.ProjectionMatrix.InverseFast();
 
 			FSceneView::DeprojectScreenToWorld(ScreenPosition, ProjectionData.GetConstrainedViewRect(), InvViewMatrix, InvProjectionMatrix, /*out*/ RayOrigin, /*out*/ RayDirection);

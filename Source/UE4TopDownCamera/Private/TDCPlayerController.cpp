@@ -144,7 +144,7 @@ void ATDCPlayerController::PlayerTick(float DeltaTime)
 
 	if (GetSpectatorPawn()->GetFollowMainCharacter() && MainCharacter)
 	{
-		// TODO: maybe don't create a new stack variable in the Tick method
+		// TODO: do not create a new stack variable in the Tick method
 		FVector newLocation(MainCharacter->GetActorLocation()); 
 
 		//set the Z to avoid flickering. The value doesn't matter, because the camera has its own configuration.
