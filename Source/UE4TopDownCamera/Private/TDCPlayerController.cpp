@@ -2,6 +2,7 @@
 
 #include "UE4TopDownCamera.h"
 #include "TDCPlayerController.h"
+#include "Blueprint/AIBlueprintHelperLibrary.h"
 
 ATDCPlayerController::ATDCPlayerController(const class FObjectInitializer& ObjectInitializer)
 	: Super(ObjectInitializer)
@@ -44,7 +45,7 @@ void ATDCPlayerController::SetupInputComponent()
 	//InputComponent->BindAxis("ZoomAxis", this, &ATDCPlayerController::ZoomAxis);
 
 	// Camera controls
-	InputHandler = ConstructObject<UTDCInput>(UTDCInput::StaticClass(), this);
+	InputHandler = NewObject<UTDCInput>(this, UTDCInput::StaticClass(), TEXT("TDCInput"));
 
 	BIND_1P_ACTION(InputHandler, EGameKey::Tap, IE_Pressed, &ATDCPlayerController::OnTapPressed);
 	BIND_1P_ACTION(InputHandler, EGameKey::Hold, IE_Pressed, &ATDCPlayerController::OnHoldPressed);
@@ -75,7 +76,7 @@ void ATDCPlayerController::SpawnMainCharacter()
 		currentPlayStart = *It;
 
 		FActorSpawnParameters SpawnInfo;
-		SpawnInfo.bNoCollisionFail = true;
+		SpawnInfo.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButDontSpawnIfColliding;
 		SpawnInfo.Owner = this;
 		SpawnInfo.Instigator = NULL;
 		SpawnInfo.bDeferConstruction = false;
@@ -172,13 +173,13 @@ void ATDCPlayerController::SetNewMoveDestination(FVector DestLocation)
 {
 	if (MainCharacter)
 	{
-		UNavigationSystem* const NavSys = GetWorld()->GetNavigationSystem();
+		UNavigationSystemBase* const NavSys = GetWorld()->GetNavigationSystem();
 		float const Distance = FVector::Dist(DestLocation, MainCharacter->GetActorLocation());
 
 		// We need to issue move command only if far enough in order for walk animation to play correctly
-		if (NavSys && (Distance > MinDistanceToMoveCharacter) && GetCameraComponent())
+		if (Distance > MinDistanceToMoveCharacter && GetCameraComponent())
 		{
-			NavSys->SimpleMoveToLocation(this, DestLocation);
+			UAIBlueprintHelperLibrary::SimpleMoveToLocation(this, DestLocation);
 			MoveMainCharacterToLocation(DestLocation);
 		}
 	}
