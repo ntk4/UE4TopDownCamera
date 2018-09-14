@@ -173,7 +173,6 @@ void ATDCPlayerController::SetNewMoveDestination(FVector DestLocation)
 {
 	if (MainCharacter)
 	{
-		UNavigationSystemBase* const NavSys = GetWorld()->GetNavigationSystem();
 		float const Distance = FVector::Dist(DestLocation, MainCharacter->GetActorLocation());
 
 		// We need to issue move command only if far enough in order for walk animation to play correctly
