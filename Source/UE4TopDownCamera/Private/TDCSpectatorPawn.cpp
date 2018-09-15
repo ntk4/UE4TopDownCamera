@@ -24,12 +24,12 @@ ATDCSpectatorPawn::ATDCSpectatorPawn(const FObjectInitializer& OI)
 	CameraBoomComp->CameraLagSpeed = 4; // the lower the lagier, 10=default, 1=max lag, but 0=no lag
 	CameraBoomComp->bUsePawnControlRotation = false;
 	CameraBoomComp->bInheritYaw = false; // don't rotate the dungeon when the character rotates
-	CameraBoomComp->AttachParent = GetRootComponent();
+	CameraBoomComp->SetupAttachment(GetRootComponent());
 
 	CameraComponent = OI.CreateDefaultSubobject<UTDCCameraComponent>(this, TEXT("Camera"));
 
 	//CameraComponent->SetRelativeRotation(FRotator(-85, 0, 0)); // rotation of the camera itself on Y so as to look at the character
-	CameraComponent->AttachParent = CameraBoomComp;
+	CameraComponent->SetupAttachment(CameraBoomComp);
 }
 
 void ATDCSpectatorPawn::MoveForward(float Val)
